@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Slot Availability</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 20px;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+        .day-button {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 1.2em;
+        }
+        .day-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Modal styling */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 10px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .slots {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 5px;
+            margin-top: 20px;
+        }
+        .slot {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            padding: 8px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .booked {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Class Slot Availability</h1>
+<div class="calendar">
+    <button class="day-button" onclick="openModal('monday')">Monday</button>
+    <button class="day-button" onclick="openModal('tuesday')">Tuesday</button>
+    <button class="day-button" onclick="openModal('wednesday')">Wednesday</button>
+    <button class="day-button" onclick="openModal('thursday')">Thursday</button>
+    <button class="day-button" onclick="openModal('friday')">Friday</button>
+    <button class="day-button" onclick="openModal('saturday')">Saturday</button>
+    <button class="day-button" onclick="openModal('sunday')">Sunday</button>
+</div>
+
+<!-- Modal for each day -->
+<div id="monday-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('monday')">&times;</span>
+        <h3>Monday Slots</h3>
+        <div class="slots" id="monday-slots"></div>
+    </div>
+</div>
+
+<div id="tuesday-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('tuesday')">&times;</span>
+        <h3>Tuesday Slots</h3>
+        <div class="slots" id="tuesday-slots"></div>
+    </div>
+</div>
+
+<div id="wednesday-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('wednesday')">&times;</span>
+        <h3>Wednesday Slots</h3>
+        <div class="slots" id="wednesday-slots"></div>
+    </div>
+</div>
+
+<div id="thursday-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('thursday')">&times;</span>
+        <h3>Thursday Slots</h3>
+        <div class="slots" id="thursday-slots"></div>
+    </div>
+</div>
+
+<div id="friday-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('friday')">&times;</span>
+        <h3>Friday Slots</h3>
+        <div class="slots" id="friday-slots"></div>
+    </div>
+</div>
+
+<div id="saturday-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('saturday')">&times;</span>
+        <h3>Saturday Slots</h3>
+        <div class="slots" id="saturday-slots"></div>
+    </div>
+</div>
+
+<div id="sunday-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('sunday')">&times;</span>
+        <h3>Sunday Slots</h3>
+        <div class="slots" id="sunday-slots"></div>
+    </div>
+</div>
+
+<script>
+    // Function to open modal for a specific day
+    function openModal(day) {
+        document.getElementById(day + '-modal').style.display = 'block';
+    }
+
+    // Function to close modal for a specific day
+    function closeModal(day) {
+        document.getElementById(day + '-modal').style.display = 'none';
+    }
+
+    // Load slots for each day
+    const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    const bookedSlots = JSON.parse(localStorage.getItem('bookedSlots')) || {};
+
+    days.forEach(day => {
+        const slotsContainer = document.getElementById(day + '-slots');
+        for (let i = 0; i < 24; i++) {
+            let slot1 = document.createElement('div');
+            let slot1Id = `${day}-${i}-00-30`;
+            slot1.classList.add('slot');
+            slot1.innerText = `${i}:00 - ${i}:30`;
+            slot1.id = slot1Id;
+
+            let slot2 = document.createElement('div');
+            let slot2Id = `${day}-${i}-30-00`;
+            slot2.classList.add('slot');
+            slot2.innerText = `${i}:30 - ${i + 1}:00`;
+            slot2.id = slot2Id;
+
+            if (bookedSlots[slot1Id]) slot1.classList.add('booked');
+            if (bookedSlots[slot2Id]) slot2.classList.add('booked');
+
+            slot1.addEventListener('click', () => toggleBooking(slot1, slot1Id));
+            slot2.addEventListener('click', () => toggleBooking(slot2, slot2Id));
+
+            slotsContainer.appendChild(slot1);
+            slotsContainer.appendChild(slot2);
+        }
+    });
+
+    function toggleBooking(slot, slotId) {
+        if (slot.classList.contains('booked')) {
+            slot.classList.remove('booked');
+            delete bookedSlots[slotId];
+        } else {
+            slot.classList.add('booked');
+            bookedSlots[slotId] = true;
+        }
+        localStorage.setItem('bookedSlots', JSON.stringify(bookedSlots));
+    }
+</script>
+
+</body>
+</html>
