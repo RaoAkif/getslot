@@ -1,282 +1,208 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Class Slot Availability</title>
     <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 20px;
-        background-color: #f4f4f4;
-      }
-      h1 {
-        text-align: center;
-        margin-bottom: 20px;
-      }
-
-      /* Main calendar grid */
-      .calendar {
-        display: grid;
-        grid-template-columns: repeat(1, 1fr);
-        gap: 20px;
-        max-width: 100%;
-        margin: 0 auto;
-      }
-
-      .day-button {
-        background-color: #007bff;
-        color: white;
-        padding: 20px;
-        text-align: center;
-        border: none;
-        cursor: pointer;
-        border-radius: 8px;
-        font-size: 1.2em;
-      }
-      .day-button:hover {
-        background-color: #0056b3;
-      }
-
-      /* Modal styling */
-      .modal {
-        display: none;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.5);
-      }
-      .modal-content {
-        background-color: #fff;
-        margin: 10% auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 90%;
-        max-width: 600px;
-        border-radius: 10px;
-      }
-      .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-        cursor: pointer;
-      }
-      .close:hover,
-      .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-      }
-      .slots {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 5px;
-        margin-top: 20px;
-      }
-      .slot {
-        background-color: #d4edda;
-        border: 1px solid #c3e6cb;
-        padding: 8px;
-        text-align: center;
-        cursor: pointer;
-        border-radius: 4px;
-      }
-      .booked {
-        background-color: #f8d7da;
-        border-color: #f5c6cb;
-        color: #721c24;
-      }
-
-      /* Mobile view - Full width day buttons (already applied) */
-      .calendar {
-        grid-template-columns: 1fr;
-      }
-
-      /* Tablet view - 2 cards per row */
-      @media (min-width: 600px) {
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
         .calendar {
-          grid-template-columns: repeat(2, 1fr);
-          gap: 20px;
-          justify-content: center;
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 20px;
+            max-width: 100%;
+            margin: 0 auto;
         }
-
         .day-button {
-          padding: 40px;
-          font-size: 1.5em;
-          border-radius: 12px;
-          border: 2px solid #007bff;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 1.2em;
         }
-
-        /* Center the 7th card vertically */
-        .calendar button:nth-child(7) {
-          align-self: center;
+        .day-button:hover {
+            background-color: #0056b3;
         }
-      }
-
-      /* Desktop view - Same as tablet but slightly larger */
-      @media (min-width: 1024px) {
-        .calendar {
-          grid-template-columns: repeat(2, 1fr);
-          gap: 30px;
-          max-width: 1000px;
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
         }
-
-        .day-button {
-          padding: 50px;
-          font-size: 1.8em;
-          border-radius: 15px;
-          border: 3px solid #007bff;
-          box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80%;
+            border-radius: 10px;
+            overflow-y: auto;
         }
-
-        /* Ensure the 7th button is centered vertically but same size as others */
-        .calendar button:nth-child(7) {
-          align-self: center;
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
         }
-      }
+        .close:hover {
+            color: black;
+        }
+        .slots {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 5px;
+            margin-top: 20px;
+        }
+        .slot {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            padding: 8px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .booked {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        @media (min-width: 600px) {
+            .calendar {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+                justify-content: center;
+            }
+            .day-button {
+                padding: 40px;
+                font-size: 1.5em;
+                border-radius: 12px;
+                border: 2px solid #007bff;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+        }
+        @media (min-width: 1024px) {
+            .calendar {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 30px;
+                max-width: 1000px;
+            }
+            .day-button {
+                padding: 50px;
+                font-size: 1.8em;
+                border-radius: 15px;
+                border: 3px solid #007bff;
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            }
+        }
+        #modal-title {
+            text-align: center;
+            margin-bottom: 20px;
+        }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <h1>Class Slot Availability</h1>
-    <div class="calendar">
-      <button class="day-button" onclick="openModal('monday')">Monday</button>
-      <button class="day-button" onclick="openModal('tuesday')">Tuesday</button>
-      <button class="day-button" onclick="openModal('wednesday')">
-        Wednesday
-      </button>
-      <button class="day-button" onclick="openModal('thursday')">
-        Thursday
-      </button>
-      <button class="day-button" onclick="openModal('friday')">Friday</button>
-      <button class="day-button" onclick="openModal('saturday')">
-        Saturday
-      </button>
-      <button class="day-button" onclick="openModal('sunday')">Sunday</button>
+    <div class="calendar"></div>
+
+<!-- Modal Template -->
+<div id="modal-template" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h3 id="modal-title"></h3>
+        <div class="slots" id="modal-slots"></div>
     </div>
+</div>
 
-    <!-- Modals for each day -->
-    <div id="monday-modal" class="modal">
-      <div class="modal-content">
-        <span class="close" onclick="closeModal('monday')">&times;</span>
-        <h3>Monday Slots</h3>
-        <div class="slots" id="monday-slots"></div>
-      </div>
-    </div>
+<script>
+    const days = [
+        "monday", "tuesday", "wednesday", "thursday", 
+        "friday", "saturday", "sunday"
+    ];
+    const bookedSlots = JSON.parse(localStorage.getItem("bookedSlots")) || {};
 
-    <div id="tuesday-modal" class="modal">
-      <div class="modal-content">
-        <span class="close" onclick="closeModal('tuesday')">&times;</span>
-        <h3>Tuesday Slots</h3>
-        <div class="slots" id="tuesday-slots"></div>
-      </div>
-    </div>
+    // Generate calendar buttons
+    const calendarContainer = document.querySelector('.calendar');
+    days.forEach(day => {
+        const button = document.createElement('button');
+        button.classList.add('day-button');
+        button.innerText = day.charAt(0).toUpperCase() + day.slice(1);
+        button.onclick = () => openModal(day);
+        calendarContainer.appendChild(button);
+    });
 
-    <div id="wednesday-modal" class="modal">
-      <div class="modal-content">
-        <span class="close" onclick="closeModal('wednesday')">&times;</span>
-        <h3>Wednesday Slots</h3>
-        <div class="slots" id="wednesday-slots"></div>
-      </div>
-    </div>
+    function openModal(day) {
+        const modal = document.getElementById('modal-template');
+        document.getElementById('modal-title').innerText = `${day.charAt(0).toUpperCase() + day.slice(1)} Slots`;
+        document.getElementById('modal-slots').innerHTML = '';
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
 
-    <div id="thursday-modal" class="modal">
-      <div class="modal-content">
-        <span class="close" onclick="closeModal('thursday')">&times;</span>
-        <h3>Thursday Slots</h3>
-        <div class="slots" id="thursday-slots"></div>
-      </div>
-    </div>
-
-    <div id="friday-modal" class="modal">
-      <div class="modal-content">
-        <span class="close" onclick="closeModal('friday')">&times;</span>
-        <h3>Friday Slots</h3>
-        <div class="slots" id="friday-slots"></div>
-      </div>
-    </div>
-
-    <div id="saturday-modal" class="modal">
-      <div class="modal-content">
-        <span class="close" onclick="closeModal('saturday')">&times;</span>
-        <h3>Saturday Slots</h3>
-        <div class="slots" id="saturday-slots"></div>
-      </div>
-    </div>
-
-    <div id="sunday-modal" class="modal">
-      <div class="modal-content">
-        <span class="close" onclick="closeModal('sunday')">&times;</span>
-        <h3>Sunday Slots</h3>
-        <div class="slots" id="sunday-slots"></div>
-      </div>
-    </div>
-
-    <script>
-      // Function to open modal for a specific day
-      function openModal(day) {
-        document.getElementById(day + "-modal").style.display = "block";
-      }
-
-      // Function to close modal for a specific day
-      function closeModal(day) {
-        document.getElementById(day + "-modal").style.display = "none";
-      }
-
-      // Load slots for each day
-      const days = [
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday",
-        "sunday",
-      ];
-      const bookedSlots = JSON.parse(localStorage.getItem("bookedSlots")) || {};
-
-      days.forEach((day) => {
-        const slotsContainer = document.getElementById(day + "-slots");
+        // Populate slots
+        const slotsContainer = document.getElementById('modal-slots');
         for (let i = 0; i < 24; i++) {
-          let slot1 = document.createElement("div");
-          let slot1Id = `${day}-${i}-00-30`;
-          slot1.classList.add("slot");
-          slot1.innerText = `${i}:00 - ${i}:30`;
-          slot1.id = slot1Id;
-
-          let slot2 = document.createElement("div");
-          let slot2Id = `${day}-${i}-30-00`;
-          slot2.classList.add("slot");
-          slot2.innerText = `${i}:30 - ${i + 1}:00`;
-          slot2.id = slot2Id;
-
-          if (bookedSlots[slot1Id]) slot1.classList.add("booked");
-          if (bookedSlots[slot2Id]) slot2.classList.add("booked");
-
-          slot1.addEventListener("click", () => toggleBooking(slot1, slot1Id));
-          slot2.addEventListener("click", () => toggleBooking(slot2, slot2Id));
-
-          slotsContainer.appendChild(slot1);
-          slotsContainer.appendChild(slot2);
+            createSlot(slotsContainer, day, i, "00", "30");
+            createSlot(slotsContainer, day, i, "30", "00");
         }
-      });
+    }
 
-      function toggleBooking(slot, slotId) {
-        if (slot.classList.contains("booked")) {
-          slot.classList.remove("booked");
-          delete bookedSlots[slotId];
+    function createSlot(container, day, hour, start, end) {
+        const slot = document.createElement('div');
+        const slotId = `${day}-${hour}-${start}-${end}`;
+        slot.classList.add('slot');
+        slot.innerText = `${hour}:${start} - ${hour + 1}:${end}`;
+        slot.id = slotId;
+
+        if (bookedSlots[slotId]) slot.classList.add('booked');
+        slot.addEventListener('click', () => toggleBooking(slot, slotId));
+
+        container.appendChild(slot);
+    }
+
+    function toggleBooking(slot, slotId) {
+        const bookedSlots = JSON.parse(localStorage.getItem("bookedSlots")) || {};
+        if (bookedSlots[slotId]) {
+            delete bookedSlots[slotId];
+            slot.classList.remove("booked");
         } else {
-          slot.classList.add("booked");
-          bookedSlots[slotId] = true;
+            bookedSlots[slotId] = true;
+            slot.classList.add("booked");
         }
         localStorage.setItem("bookedSlots", JSON.stringify(bookedSlots));
-      }
-    </script>
-  </body>
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('modal-template');
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    // Close modal when clicked outside of modal content
+    window.onclick = function(event) {
+        const modal = document.getElementById('modal-template');
+        if (event.target === modal) {
+            closeModal();
+        }
+    };
+</script>
+</body>
 </html>
